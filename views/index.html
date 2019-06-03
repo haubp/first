@@ -7,9 +7,9 @@
     <title>Secure ECU</title>
 </head>
 <body>
-    <form action="https://warm-tundra-12287.herokuapp.com/pushFirmware" method="POST">
-        New Firmware: <input type="text" name="inputFirmware"> <br>
-        <input type="submit" value="Submit">
-    </form>
+    <form id="uploadbanner" enctype="multipart/form-data" method="post" action="http://127.0.0.1:5000/pushFirmware">
+        <input id="fileupload" name="myfile" type="file" /> <br>
+        <input type="submit" value="submit" id="submit" />
+     </form>
 </body>
 </html>
