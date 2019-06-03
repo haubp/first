@@ -1,22 +1,18 @@
-// const express = require('express')
-// const path = require('path')
-// const PORT = process.env.PORT || 5000
-
-// doUpdate = "false"
-
-// express()
-//   .use(express.static(path.join(__dirname, 'public')))
-//   .set('views', path.join(__dirname, 'views'))
-//   .set('view engine', 'ejs')
-//   .get('/', (req, res) => res.send(doUpdate))
-//   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
-
 var express = require('express');
 var app = express();
 
+update = 'false'
+
 app.get('/', function(req, res) {
-    res.send('Hi there');
+    status = update;
+    update = 'false';
+    res.send(status);
 })
+
+app.post('/pushFirmware', function(req, res) {
+    update = 'true';
+    res.send('saved new firmware');
+});
 
 var server = app.listen(process.env.PORT, function() {
     var host = server.address().address;
