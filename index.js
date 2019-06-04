@@ -22,7 +22,7 @@ app.post('/pushFirmware', type, function(req, res) {
     update = 'true';
 
     var tmp_path = req.file.path;
-    var target_path = './upload/' + req.file.originalname;
+    var target_path = './public/firmware/firmware.bin';
 
     var src = fs.createReadStream(tmp_path);
     var dest = fs.createWriteStream(target_path);
@@ -35,7 +35,7 @@ app.get('/pushFirmwarePage', function(req, res) {
     res.sendFile(__dirname + "/" + "views/index.html");
 });
 
-var server = app.listen(process.env.PORT, function() {
+var server = app.listen(/*process.env.PORT*/5000, function() {
     var host = server.address().address;
     var port = server.address().port;
 
