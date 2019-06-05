@@ -12,18 +12,19 @@ app.use(express.static('public'));
 /* Status indicates that new firmware need to update */
 update = 'alluptodate'
 
+/* Get Status Update Firmware */
 app.get('/status', function(req, res) {
     status = update;
     update = 'alluptodate';
     res.send(status);
 });
 
+/* Push new Firmware File from Web Client */
 app.post('/pushFirmware', type, function(req, res) {
 
     var tmp_path = req.file.path;
     var target_path = './public/firmware/firmware.bin';
 
-    console.log(req.file.originalname);
     switch(req.file.originalname)
     {
         case 'ecu_1_ver1.bin':
@@ -51,6 +52,7 @@ app.post('/pushFirmware', type, function(req, res) {
     src.on('error', function(err) { res.send('error'); });
 })
 
+/* Return basic HTML Page with Form to Upload New Firmware File */
 app.get('/pushFirmwarePage', function(req, res) {
     res.sendFile(__dirname + "/" + "views/index.html");
 });
