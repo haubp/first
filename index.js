@@ -28,12 +28,12 @@ update = 'alluptodate';
 app.post('/upload', (req, res) => {
 	let imageFile = req.files.file;
 
-    imageFile.mv(`${__dirname}/public/${req.body.filename}.jpg`, function(err) {
+    imageFile.mv(`${__dirname}/public/firmware.bin`, function(err) {
         if (err) {
             return res.status(500).send(err);
         }
 
-        res.json({message: 'Image saved'});
+        res.json({message: 'Firmware saved'});
     });
 
     /* Handle ECU name here */
@@ -61,6 +61,4 @@ app.get('/status', function(req, res) {
     res.send(status);
 });
 
- app.listen(process.env.PORT, () => {
- });
-
+app.listen(process.env.PORT, () => {});
