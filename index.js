@@ -1,16 +1,58 @@
-var express = require('express');
-var fs = require('fs');
-var multer  = require('multer');
+const express   = require('express');
+const fs        = require('fs');
+const multer    = require('multer');
+const path      = require('path');
+const logger    = require('morgan');
+const cors      = require('cors');
+const cookieParser  = require('cookie-parser');
+const bodyParser    = require('body-parser');
+const fileUpload    = require('express-fileupload');
 
 var app = express();
 
-var upload = multer({ dest: 'upload/'});
-var type = upload.single('myfile');
+ app.set('views', path.join(__dirname, 'views'));
+ app.set('view engine', 'jade');
 
-app.use(express.static('public'));
+ app.use(logger('dev'));
+ app.use(cors());
+ app.use(bodyParser.json());
+ app.use(bodyParser.urlencoded({extended: false}));
+ app.use(cookieParser());
+ app.use(fileUpload());
+ app.use('/public', express.static(__dirname + '/public'));
 
-/* Status indicates that new firmware need to update */
-update = 'alluptodate'
+ /* Status indicates that new firmware need to update */
+update = 'alluptodate';
+
+/* Handle POST new firmware coming */
+app.post('/upload', (req, res) => {
+	let imageFile = req.files.file;
+
+    imageFile.mv(`${__dirname}/public/${req.body.filename}.jpg`, function(err) {
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        res.json({message: 'Image saved'});
+    });
+
+    /* Handle ECU name here */
+    switch(req.body.filename) 
+    {
+    	case '1':
+    		update = 'ecu_1';
+    		break;
+    	case '2':
+    		update = 'ecu_2';
+    		break;
+    	case '3':
+    		update = 'ecu_3';
+    		break;
+    	case '4':
+    		update = 'ecu_4';
+    		break;
+    }
+ })
 
 /* Get Status Update Firmware */
 app.get('/status', function(req, res) {
@@ -19,47 +61,6 @@ app.get('/status', function(req, res) {
     res.send(status);
 });
 
-/* Push new Firmware File from Web Client */
-app.post('/pushFirmware', type, function(req, res) {
+ app.listen(process.env.PORT, () => {
+ });
 
-    var tmp_path = req.file.path;
-    var target_path = './public/firmware/firmware.bin';
-
-    switch(req.file.originalname)
-    {
-        case 'ecu_1_ver1.bin':
-        case 'ecu_1_ver2.bin':
-            update = 'ecu1';
-            break;
-        case 'ecu_2_ver1.bin':
-        case 'ecu_2_ver2.bin':
-            update = 'ecu2';
-            break;
-        case 'ecu_3_ver1.bin':
-        case 'ecu_3_ver2.bin':
-            update = 'ecu3';
-            break;
-        case 'ecu_4_ver1.bin':
-        case 'ecu_4_ver2.bin':
-            update = 'ecu4';
-            break;
-    }
-
-    var src = fs.createReadStream(tmp_path);
-    var dest = fs.createWriteStream(target_path);
-    src.pipe(dest);
-    src.on('end', function() { res.send('complete'); });
-    src.on('error', function(err) { res.send('error'); });
-})
-
-/* Return basic HTML Page with Form to Upload New Firmware File */
-app.get('/pushFirmwarePage', function(req, res) {
-    res.sendFile(__dirname + "/" + "views/index.html");
-});
-
-var server = app.listen(process.env.PORT, function() {
-    var host = server.address().address;
-    var port = server.address().port;
-
-    console.log('Example app listening at http://%s:%s', host, port);
-});
