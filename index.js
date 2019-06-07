@@ -9,17 +9,16 @@ const bodyParser    = require('body-parser');
 const fileUpload    = require('express-fileupload');
 
 var app = express();
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
- app.set('views', path.join(__dirname, 'views'));
- app.set('view engine', 'jade');
-
- app.use(logger('dev'));
- app.use(cors());
- app.use(bodyParser.json());
- app.use(bodyParser.urlencoded({extended: false}));
- app.use(cookieParser());
- app.use(fileUpload());
- app.use('/public', express.static(__dirname + '/public'));
+app.use(logger('dev'));
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+app.use(fileUpload());
+app.use('/public', express.static(__dirname + '/public'));
 
  /* Status indicates that new firmware need to update */
 update = 'alluptodate';
@@ -36,19 +35,19 @@ app.post('/upload', (req, res) => {
         res.json({message: 'Firmware saved'});
     });
 
-    /* Handle ECU name here */
-    switch(req.body.filename) 
+    /* Handle which ECU need to update */
+    switch(req.body.id) 
     {
-    	case '1':
+    	case 1:
     		update = 'ecu_1';
     		break;
-    	case '2':
+    	case 2:
     		update = 'ecu_2';
     		break;
-    	case '3':
+    	case 3:
     		update = 'ecu_3';
     		break;
-    	case '4':
+    	case 4:
     		update = 'ecu_4';
     		break;
     }
