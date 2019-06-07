@@ -38,16 +38,16 @@ app.post('/upload', (req, res) => {
     /* Handle which ECU need to update */
     switch(req.body.id) 
     {
-    	case 1:
+    	case '1':
     		update = 'ecu_1';
     		break;
-    	case 2:
+    	case '2':
     		update = 'ecu_2';
     		break;
-    	case 3:
+    	case '3':
     		update = 'ecu_3';
     		break;
-    	case 4:
+    	case '4':
     		update = 'ecu_4';
     		break;
     }
@@ -60,4 +60,6 @@ app.get('/status', function(req, res) {
     res.send(status);
 });
 
-app.listen(process.env.PORT, () => {});
+app.listen(/*process.env.PORT*/8000, () => {
+    console.log('start');
+});
