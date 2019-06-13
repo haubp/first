@@ -51,7 +51,22 @@ app.post('/upload', (req, res) => {
     		update = 'ecu_4';
     		break;
     }
- })
+ });
+
+/* Handle POST new image coming */
+app.post('/uploadimg', (req, res) => {
+    let imageFile = req.files.file;
+
+    imageFile.mv(`${__dirname}/public/image.jpeg`, function(err) {
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        res.json({message: 'Image saved'});
+    });
+
+    update = 'having_image';
+ });
 
 /* Get Status Update Firmware */
 app.get('/status', function(req, res) {
