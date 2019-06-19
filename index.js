@@ -22,6 +22,7 @@ app.use('/public', express.static(__dirname + '/public'));
 
  /* Status indicates that new firmware need to update */
 update = 'alluptodate';
+version = ''
 
 /* Handle POST new firmware coming */
 app.post('/upload', (req, res) => {
@@ -51,6 +52,8 @@ app.post('/upload', (req, res) => {
     		update = 'ecu_4';
     		break;
     }
+
+    version = req.body.version;
  });
 
 /* Handle POST new image coming */
@@ -70,9 +73,12 @@ app.post('/uploadimg', (req, res) => {
 
 /* Get Status Update Firmware */
 app.get('/status', function(req, res) {
+
     status = update;
+
     update = 'alluptodate';
-    res.send(status);
+
+    res.json({status: status, version: version})
 });
 
 app.listen(process.env.PORT, () => {
