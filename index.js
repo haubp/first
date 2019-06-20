@@ -33,27 +33,27 @@ app.post('/upload', (req, res) => {
             return res.status(500).send(err);
         }
 
+        /* Handle which ECU need to update */
+        switch(req.body.id) 
+        {
+        case '1':
+            update = 'ecu_1';
+            break;
+        case '2':
+            update = 'ecu_2';
+            break;
+        case '3':
+            update = 'ecu_3';
+            break;
+        case '4':
+            update = 'ecu_4';
+            break;
+        }
+
+        version = req.body.version;
+
         res.json({message: 'Firmware saved'});
     });
-
-    /* Handle which ECU need to update */
-    switch(req.body.id) 
-    {
-    	case '1':
-    		update = 'ecu_1';
-    		break;
-    	case '2':
-    		update = 'ecu_2';
-    		break;
-    	case '3':
-    		update = 'ecu_3';
-    		break;
-    	case '4':
-    		update = 'ecu_4';
-    		break;
-    }
-
-    version = req.body.version;
  });
 
 /* Handle POST new image coming */
